@@ -44,123 +44,356 @@ export function BriefForm() {
   };
 
   return (
-    <div className='w-full max-w-4xl mx-auto'>
-      <div className='bg-white rounded-lg shadow-lg p-8'>
-        <h2 className='text-2xl font-bold text-gray-900 mb-6'>
-          Create Your Brief
-        </h2>
-
-        <form onSubmit={handleSubmit} className='space-y-6'>
-          <div>
-            <label
-              htmlFor='brief'
-              className='block text-sm font-medium text-gray-700 mb-2'
-            >
-              Enter your brief details
-            </label>
-            <textarea
-              id='brief'
-              rows={6}
-              className='w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 resize-none'
-              placeholder='Describe your project, goals, requirements, and any other relevant information...'
-              value={briefInput}
-              onChange={(e) => setBriefInput(e.target.value)}
-              required
-            />
-          </div>
-
-          {error && (
-            <div className='bg-red-50 border-l-4 border-red-400 p-4'>
-              <div className='flex'>
-                <div className='flex-shrink-0'>
-                  <svg
-                    className='h-5 w-5 text-red-400'
-                    viewBox='0 0 20 20'
-                    fill='currentColor'
-                  >
-                    <path
-                      fillRule='evenodd'
-                      d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z'
-                      clipRule='evenodd'
-                    />
-                  </svg>
-                </div>
-                <div className='ml-3'>
-                  <p className='text-sm text-red-700'>{error}</p>
-                  {error.includes('n8n webhook not found') && (
-                    <p className='mt-2 text-xs text-red-600'>
-                      The app is currently running in test mode. To enable real
-                      AI processing, please configure your n8n webhook.
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          <button
-            type='submit'
-            disabled={isLoading || !briefInput.trim()}
-            className='w-full bg-blue-600 text-white font-medium py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        width: '100%',
+        boxSizing: 'border-box',
+        padding: '20px 0',
+        margin: '0',
+        backgroundColor: '#ff9ec0',
+        overflow: 'auto',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '800px',
+          margin: '0 auto',
+          padding: '20px',
+          boxSizing: 'border-box',
+        }}
+      >
+        {!formattedBrief ? (
+          <div
+            style={{
+              backgroundColor: 'white',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+              padding: '40px',
+              boxSizing: 'border-box',
+              position: 'relative',
+            }}
           >
-            {isLoading ? (
-              <span className='flex items-center justify-center'>
-                <svg
-                  className='animate-spin -ml-1 mr-3 h-5 w-5 text-white'
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                >
-                  <circle
-                    className='opacity-25'
-                    cx='12'
-                    cy='12'
-                    r='10'
-                    stroke='currentColor'
-                    strokeWidth='4'
-                  ></circle>
-                  <path
-                    className='opacity-75'
-                    fill='currentColor'
-                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-                  ></path>
-                </svg>
-                Processing...
-              </span>
-            ) : (
-              'Generate Formatted Brief'
-            )}
-          </button>
-        </form>
-
-        {formattedBrief && (
-          <div className='mt-8'>
-            <div className='flex items-center justify-between mb-4'>
-              <h3 className='text-lg font-semibold text-gray-900'>
-                Formatted Brief
-              </h3>
-              {isTestMode && (
-                <span className='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800'>
-                  Test Mode
-                </span>
-              )}
+            <div
+              style={{
+                textAlign: 'center',
+                marginBottom: '30px',
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: '2rem',
+                  fontWeight: '900',
+                  color: 'black',
+                  marginBottom: '8px',
+                  textAlign: 'center',
+                  fontFamily: 'Arial, sans-serif',
+                  letterSpacing: '-0.5px',
+                }}
+              >
+                CREATE YOUR BRIEF
+              </h2>
+              <p
+                style={{
+                  color: '#666',
+                  textAlign: 'center',
+                  fontSize: '1rem',
+                  maxWidth: '500px',
+                  margin: '0 auto',
+                }}
+              >
+                Transform your ideas into professionally formatted briefs using
+                AI
+              </p>
             </div>
-            <div className='bg-gray-50 rounded-lg p-6 border border-gray-200'>
-              <div className='prose max-w-none'>
-                <pre className='whitespace-pre-wrap font-sans text-gray-700'>
-                  {formattedBrief}
-                </pre>
+
+            <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
+              <div style={{ marginBottom: '20px' }}>
+                <label
+                  htmlFor='brief'
+                  style={{
+                    display: 'block',
+                    fontSize: '0.8rem',
+                    fontWeight: '600',
+                    marginBottom: '8px',
+                    color: '#333',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                  }}
+                >
+                  ENTER YOUR BRIEF DETAILS
+                </label>
+                <textarea
+                  id='brief'
+                  rows={8}
+                  style={{
+                    width: '100%',
+                    backgroundColor: '#f9f9f9',
+                    padding: '16px',
+                    border: 'none',
+                    resize: 'none',
+                    boxSizing: 'border-box',
+                    minHeight: '180px',
+                    fontSize: '0.9rem',
+                    color: '#333',
+                  }}
+                  placeholder='Describe your project, goals, requirements, and any other relevant information...'
+                  value={briefInput}
+                  onChange={(e) => setBriefInput(e.target.value)}
+                  required
+                />
+              </div>
+
+              {error && (
+                <div
+                  style={{
+                    backgroundColor: '#fee2e2',
+                    borderLeft: '4px solid #ef4444',
+                    padding: '12px',
+                    marginBottom: '10px',
+                  }}
+                >
+                  <div style={{ display: 'flex' }}>
+                    <div style={{ flexShrink: 0 }}>
+                      <svg
+                        style={{
+                          height: '16px',
+                          width: '16px',
+                          color: '#ef4444',
+                        }}
+                        viewBox='0 0 20 20'
+                        fill='currentColor'
+                      >
+                        <path
+                          fillRule='evenodd'
+                          d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z'
+                          clipRule='evenodd'
+                        />
+                      </svg>
+                    </div>
+                    <div style={{ marginLeft: '10px' }}>
+                      <p style={{ fontSize: '0.8rem', color: '#b91c1c' }}>
+                        {error}
+                      </p>
+                      {error.includes('n8n webhook not found') && (
+                        <p
+                          style={{
+                            marginTop: '6px',
+                            fontSize: '0.7rem',
+                            color: '#b91c1c',
+                          }}
+                        >
+                          The app is currently running in test mode. To enable
+                          real AI processing, please configure your n8n webhook.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  marginTop: '30px',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <button
+                  type='submit'
+                  disabled={isLoading || !briefInput.trim()}
+                  style={{
+                    display: 'inline-block',
+                    border: 'none',
+                    backgroundColor: 'black',
+                    color: 'white',
+                    borderRadius: '0',
+                    padding: '12px 30px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    fontSize: '0.8rem',
+                    boxSizing: 'border-box',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                  }}
+                >
+                  {isLoading ? (
+                    <span
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <svg
+                        className='animate-spin'
+                        xmlns='http://www.w3.org/2000/svg'
+                        fill='none'
+                        viewBox='0 0 24 24'
+                        style={{
+                          height: '1rem',
+                          width: '1rem',
+                          marginRight: '0.5rem',
+                          color: 'white',
+                        }}
+                      >
+                        <circle
+                          className='opacity-25'
+                          cx='12'
+                          cy='12'
+                          r='10'
+                          stroke='currentColor'
+                          strokeWidth='4'
+                        ></circle>
+                        <path
+                          className='opacity-75'
+                          fill='currentColor'
+                          d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                        ></path>
+                      </svg>
+                      Processing...
+                    </span>
+                  ) : (
+                    'GET STARTED'
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        ) : (
+          <div
+            style={{
+              backgroundColor: 'white',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+              boxSizing: 'border-box',
+            }}
+          >
+            <div style={{ padding: '30px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: '20px',
+                }}
+              >
+                <h3
+                  style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '900',
+                    color: 'black',
+                    textTransform: 'uppercase',
+                    letterSpacing: '-0.5px',
+                  }}
+                >
+                  YOUR BRIEF
+                </h3>
+                {isTestMode && (
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      padding: '3px 10px',
+                      fontSize: '0.65rem',
+                      fontWeight: '700',
+                      backgroundColor: '#f5f5f5',
+                      color: 'black',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px',
+                    }}
+                  >
+                    TEST MODE
+                  </span>
+                )}
+              </div>
+              <div
+                style={{
+                  backgroundColor: '#f9f9f9',
+                  padding: '20px',
+                  border: 'none',
+                  maxHeight: '400px',
+                  overflowY: 'auto',
+                }}
+              >
+                <div>
+                  <pre
+                    style={{
+                      whiteSpace: 'pre-wrap',
+                      fontFamily: 'Arial, sans-serif',
+                      color: '#333',
+                      margin: 0,
+                      fontSize: '0.85rem',
+                      lineHeight: '1.5',
+                    }}
+                  >
+                    {formattedBrief}
+                  </pre>
+                </div>
               </div>
             </div>
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(formattedBrief);
-                alert('Brief copied to clipboard!');
+
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                padding: '20px',
+                backgroundColor: '#f9f9f9',
+                gap: '15px',
+                borderTop: '1px solid #eee',
               }}
-              className='mt-4 text-blue-600 hover:text-blue-700 font-medium'
             >
-              Copy to Clipboard
-            </button>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(formattedBrief);
+                  alert('Brief copied to clipboard!');
+                }}
+                style={{
+                  backgroundColor: 'black',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '0',
+                  padding: '10px 24px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  fontSize: '0.75rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                }}
+              >
+                COPY TO CLIPBOARD
+              </button>
+              <button
+                onClick={() => {
+                  const blob = new Blob([formattedBrief], {
+                    type: 'text/plain',
+                  });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'project-brief.txt';
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                style={{
+                  backgroundColor: 'white',
+                  color: 'black',
+                  border: '1px solid black',
+                  borderRadius: '0',
+                  padding: '10px 24px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  fontSize: '0.75rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                }}
+              >
+                DOWNLOAD
+              </button>
+            </div>
           </div>
         )}
       </div>

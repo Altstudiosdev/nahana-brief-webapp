@@ -1,22 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss/preflight";
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --foreground: #000000;
+  --primary: #ff9ec0;
+  --primary-dark: #ff7eb0;
+  --primary-light: #ffbfd7;
+  --accent: #ff9ec0;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Archivo', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 800;
+}
+
+.nahana-pink {
+  color: #ff9ec0;
+}
+
+.nahana-bg-pink {
+  background-color: #ff9ec0;
+}
+
+.nahana-bg-black {
+  background-color: #000000;
+}
+
+.nahana-border-pink {
+  border-color: #ff9ec0;
+}
+
+/* Button styles */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 0;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  margin: 0.5rem;
+  min-width: 120px;
+  background-color: black;
+  color: white;
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+}
+
+.btn:hover {
+  background-color: #333;
+}
+
+.btn-primary {
+  background-color: black;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #333;
+}
+
+.btn-secondary {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+.btn-secondary:hover {
+  background-color: #f5f5f5;
+}
+
+.btn-inverse {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+}
+
+.btn-inverse:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 @layer utilities {
