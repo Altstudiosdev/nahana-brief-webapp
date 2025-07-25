@@ -1,0 +1,121 @@
+{
+  "name": "Brief Processor with OpenAI",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "brief-processor",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ],
+      "webhookId": "brief-processor"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-3.5-turbo",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a professional brief writer specializing in creating comprehensive, well-structured project briefs. Your task is to transform raw input into a polished, professional brief that includes all necessary sections for project execution."
+            },
+            {
+              "role": "user",
+              "content": "=={{ $json.briefInput }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 2000
+        },
+        "prompt": {
+          "values": [
+            {
+              "role": "user",
+              "content": "Transform the following input into a professional project brief:\n\n{{ $json.briefInput }}\n\nThe brief should include:\n\n1. **EXECUTIVE SUMMARY** - A concise overview of the project\n\n2. **PROJECT OBJECTIVES** - Clear, measurable goals (use bullet points)\n\n3. **SCOPE OF WORK** - What's included and what's not included\n\n4. **TIMELINE** - Realistic phases with estimated durations\n\n5. **DELIVERABLES** - Specific outputs and outcomes\n\n6. **SUCCESS CRITERIA** - How success will be measured\n\n7. **STAKEHOLDERS** - Key people involved and their roles\n\n8. **BUDGET CONSIDERATIONS** - High-level budget factors to consider\n\n9. **RISKS AND MITIGATION** - Potential challenges and solutions\n\n10. **NEXT STEPS** - Immediate actions required\n\nFormat the response in Markdown with clear headers and professional language. Make reasonable assumptions where specific details are not provided, but note these as recommendations."
+            }
+          ]
+        }
+      },
+      "id": "openai",
+      "name": "OpenAI Format Brief",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        450,
+        300
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "1",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "formattedBrief",
+              "value": "={{ $json.message.content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        650,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Format Brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Format Brief": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "v1",
+  "id": "brief-processor-openai-workflow",
+  "meta": {
+    "instanceId": "n8n"
+  },
+  "tags": []
+}

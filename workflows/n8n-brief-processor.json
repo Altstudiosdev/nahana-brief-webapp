@@ -1,0 +1,57 @@
+{
+  "name": "Brief Processor",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "brief-processor",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ],
+      "webhookId": "brief-processor"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract the brief input from the webhook data\nconst briefInput = $input.first().json.briefInput;\nconst userId = $input.first().json.userId;\nconst timestamp = $input.first().json.timestamp;\n\n// Format the brief with a professional structure\nconst formattedBrief = `**PROJECT BRIEF**\n\n**Generated on:** ${new Date(timestamp).toLocaleDateString('en-US', { \n  weekday: 'long', \n  year: 'numeric', \n  month: 'long', \n  day: 'numeric' \n})}\n\n**Submitted by:** User ${userId}\n\n---\n\n## EXECUTIVE SUMMARY\n\n${briefInput}\n\n## PROJECT OBJECTIVES\n\nBased on the provided brief, the key objectives include:\n${briefInput.split('.').filter(s => s.trim()).slice(0, 3).map((sentence, i) => `${i + 1}. ${sentence.trim()}`).join('\\n')}\n\n## SCOPE OF WORK\n\nThis project encompasses:\n• Initial planning and requirements gathering\n• Design and development phases\n• Testing and quality assurance\n• Deployment and launch activities\n• Post-launch support and maintenance\n\n## TIMELINE\n\n**Phase 1: Discovery & Planning** (Week 1-2)\n- Stakeholder interviews\n- Requirements documentation\n- Technical architecture design\n\n**Phase 2: Development** (Week 3-6)\n- Core functionality implementation\n- Integration development\n- Progress reviews\n\n**Phase 3: Testing & Refinement** (Week 7-8)\n- Quality assurance testing\n- User acceptance testing\n- Performance optimization\n\n**Phase 4: Deployment** (Week 9)\n- Production deployment\n- Documentation finalization\n- Handover and training\n\n## DELIVERABLES\n\n1. Comprehensive project documentation\n2. Fully functional solution meeting all requirements\n3. Test reports and quality assurance documentation\n4. Deployment guide and operational procedures\n5. Training materials and support documentation\n\n## SUCCESS CRITERIA\n\n• All functional requirements are met\n• Project delivered on schedule\n• Quality standards achieved\n• Stakeholder satisfaction confirmed\n• Successful knowledge transfer completed\n\n## RISKS AND MITIGATION\n\n**Potential Risks:**\n- Scope creep\n- Resource availability\n- Technical challenges\n- Timeline constraints\n\n**Mitigation Strategies:**\n- Clear change management process\n- Resource planning and backup\n- Technical proof of concepts\n- Regular progress monitoring\n\n## NEXT STEPS\n\n1. Review and approve this brief\n2. Schedule kickoff meeting\n3. Finalize project team\n4. Begin discovery phase\n5. Establish communication channels\n\n---\n\n*This brief serves as a foundation for project execution. Updates and refinements will be made as needed throughout the project lifecycle.*`;\n\n// Return the formatted brief\nreturn [{\n  json: {\n    formattedBrief: formattedBrief,\n    originalInput: briefInput,\n    processedAt: new Date().toISOString(),\n    userId: userId\n  }\n}];"
+      },
+      "id": "code",
+      "name": "Format Brief",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        450,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Format Brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "v1",
+  "id": "brief-processor-workflow",
+  "meta": {
+    "instanceId": "n8n"
+  },
+  "tags": []
+}
