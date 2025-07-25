@@ -9,12 +9,14 @@ export function BriefForm() {
   const [formattedBrief, setFormattedBrief] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isTestMode, setIsTestMode] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     setFormattedBrief('');
+    setIsTestMode(false);
 
     try {
       const response = await fetch('/api/brief', {
@@ -32,6 +34,7 @@ export function BriefForm() {
       }
 
       setFormattedBrief(data.formattedBrief);
+      setIsTestMode(data.testMode || false);
       setBriefInput(''); // Clear input after successful submission
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -68,7 +71,30 @@ export function BriefForm() {
 
           {error && (
             <div className='bg-red-50 border-l-4 border-red-400 p-4'>
-              <p className='text-red-700'>{error}</p>
+              <div className='flex'>
+                <div className='flex-shrink-0'>
+                  <svg
+                    className='h-5 w-5 text-red-400'
+                    viewBox='0 0 20 20'
+                    fill='currentColor'
+                  >
+                    <path
+                      fillRule='evenodd'
+                      d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z'
+                      clipRule='evenodd'
+                    />
+                  </svg>
+                </div>
+                <div className='ml-3'>
+                  <p className='text-sm text-red-700'>{error}</p>
+                  {error.includes('n8n webhook not found') && (
+                    <p className='mt-2 text-xs text-red-600'>
+                      The app is currently running in test mode. To enable real
+                      AI processing, please configure your n8n webhook.
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
           )}
 
@@ -109,9 +135,16 @@ export function BriefForm() {
 
         {formattedBrief && (
           <div className='mt-8'>
-            <h3 className='text-lg font-semibold text-gray-900 mb-4'>
-              Formatted Brief
-            </h3>
+            <div className='flex items-center justify-between mb-4'>
+              <h3 className='text-lg font-semibold text-gray-900'>
+                Formatted Brief
+              </h3>
+              {isTestMode && (
+                <span className='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800'>
+                  Test Mode
+                </span>
+              )}
+            </div>
             <div className='bg-gray-50 rounded-lg p-6 border border-gray-200'>
               <div className='prose max-w-none'>
                 <pre className='whitespace-pre-wrap font-sans text-gray-700'>
